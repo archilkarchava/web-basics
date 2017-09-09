@@ -1,0 +1,25 @@
+body{
+	margin:0px;
+}
+
+.wrapper {
+	display: flex;
+	flex-wrap: nowrap;
+	height: 100vh;
+}
+
+#column1{
+	min-width: 100px;
+	height: 100vh;
+	background: #ff0;
+}
+
+#column2{
+	width: 50%;
+	background: tomato;
+}
+
+#column3{
+	width: 50%;
+	background: blue;
+}
