@@ -10,16 +10,17 @@ body{
 
 #column1{
 	min-width: 100px;
+	width: 100px;
 	height: 100vh;
-	background: #ff0;
+	background: #000000;
 }
 
 #column2{
 	width: 50%;
-	background: tomato;
+	background: #FFE936;
 }
 
 #column3{
 	width: 50%;
-	background: blue;
+	background: #FF0F21;
 }
