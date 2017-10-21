@@ -92,6 +92,7 @@ export default class Register extends Component{
     }
 
     handleChange(e){
+        e.preventDefault();
         e.persist()
         this.setState({[e.target.name]: e.target.value}, () => {
             if(e.target.name === "username"){
@@ -106,10 +107,11 @@ export default class Register extends Component{
             if(e.target.name === "phone"){
                 this.phoneValidator()
             }
-        });
+        }, () => {});
     }
 
     handleSubmit(e){
+        e.preventDefault();
         if(this.state.username.length>0){
             if(this.passwordRegex.test(this.state.password)){
                 if(this.emailRegex.test(this.state.email)){
@@ -150,7 +152,7 @@ export default class Register extends Component{
                 <MuiThemeProvider>
                     <div>
                         <AppBar title="Регистрация"/>
-                        <form method="post" action="../../../../server/register">
+                        <form method="post" action="../../../../server/register" onSubmit={this.handleSubmit}>
                             <TextField
                                 type="text"
                                 name="username"

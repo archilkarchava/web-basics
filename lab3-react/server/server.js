@@ -20,17 +20,17 @@ var users = require('./routes/users');
 // Init app
 var app = express();
 
-// BodyParser Middleware
-app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout:'layout'}));
-app.set('view engine', 'handlebars');
+// Serve static assets
+app.use(express.static(path.resolve(__dirname, '..', 'client', 'public')));
 
-// Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+// Always return the main index.html, so react-router render the route in the client
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '..', 'client', 'public', 'index.html'));
+});
 
 // Express Session
 app.use(session({
-    secret: 'secret',
+    secret: 'My super secret.',
     saveUninitialized: true,
     resave: true
 }));
