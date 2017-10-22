@@ -49,7 +49,7 @@ router.post('/register', function(req, res){
                     return;
                 } else {
                     req.flash('success','You are now registered and can log in');
-                    res.redirect('/users/login');
+                    res.redirect('/login');
                 }
             });
             });
@@ -75,7 +75,7 @@ router.post('/login', function(req, res, next){
 router.get('/logout', function(req, res){
     req.logout();
     req.flash('success', 'You are logged out');
-    res.redirect('/users/login');
+    res.redirect('/login');
 });
 
 module.exports = router;

@@ -1,20 +1,19 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 #vscode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+/.vscode
+client/.vscode
+server/.vscode
 
 # dependencies
-/node_modules
+client/node_modules
+server/node_modules
 
 # testing
 /coverage
 
 # production
-/build
+client/build
 
 # misc
 .DS_Store

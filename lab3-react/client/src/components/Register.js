@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import axios from 'axios';
 //import InputMask from 'react-input-mask';
 
 export default class Register extends Component{
@@ -33,6 +35,10 @@ export default class Register extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        console.log("nextProps",nextProps);
+    }
+
     usernameValidator(){
         if(this.state.username.length <= 0){
             this.setState({errorUsernameMsg:"Поле обязательно для заполнения."})
@@ -46,26 +52,28 @@ export default class Register extends Component{
 
     passwordValidator(){
         if(!this.passwordRegex.test(this.state.password)){
+            if(!/^[a-zA-Z\d]+$/.test(this.state.password)){
+                this.setState({errorPassMsg:"В пароле могут использоваться только латинские буквы."})
+            }
             if(this.state.password.length < 8){
                 this.setState({errorPassMsg:"Пароль должен содержать минимум 8 символов."})
-                return false
             }
             if(this.state.password.length > 16){
                 this.setState({errorPassMsg:"Пароль не должен содержать больше 16 символов."})
-                return false
             }
             if(/^[a-z\d]+$/.test(this.state.password)){
                 this.setState({errorPassMsg:"В пароле должна быть как минимум одна заглавная буква."})
-                return false
             }
             if(/^[A-Z\d]+$/.test(this.state.password)){
                 this.setState({errorPassMsg:"В пароле должна быть как минимум одна прописная буква."})
-                return false
             }
         }
         else{
             this.setState({errorPassMsg:""})
             return true
+        }
+        if (this.state.errorPassMsg !== ''){
+            return false
         }
     }
 
@@ -116,19 +124,22 @@ export default class Register extends Component{
             if(this.passwordRegex.test(this.state.password)){
                 if(this.emailRegex.test(this.state.email)){
                     if(this.phoneRegex.test(this.state.phone)){
-                        var user =
-                        {
+                        var userData = {
                             "username": this.state.username,
                             "password": this.state.password,
                             "email": this.state.email,
                             "phone": this.state.phone
                         }
-
-                        console.log(user.username)
-                        console.log(user.password)
-                        console.log(user.email)
-                        console.log(user.phone)
-                        alert("Вы зарегестрированы!")
+                        axios.post('/api/register', userData)
+                            .then(function(response) {
+                                if(response.status === 200){
+                                    console.log("Вы зарегестрированы!");
+                                }
+                                else{
+                                    console.log("Ошибка. Извини!",response.status);
+                                }
+                            })
+                            .catch(function(error) { console.log(error); });
                     }
                     else{
                         alert("Телефон должен начинаться с +7 или 8 и состоит из 11 цифр, допускается ввод через дефисы!")
@@ -148,11 +159,10 @@ export default class Register extends Component{
     }
     render(){
         return(
-            <div className="App-registration">
                 <MuiThemeProvider>
-                    <div>
+                    <div className="app-registration">
                         <AppBar title="Регистрация"/>
-                        <form method="post" action="../../../../server/register" onSubmit={this.handleSubmit}>
+                        <form method="post" onSubmit={this.handleSubmit}>
                             <TextField
                                 type="text"
                                 name="username"
@@ -189,14 +199,13 @@ export default class Register extends Component{
                             </TextField> <br/> <br/>
                             <RaisedButton
                                 type="submit"
-                                label="Отправить"
+                                label="Зарегестрироваться"
                                 primary={true}
                             />
                         </form> <br/>
-                        <div>Уже зарегестрированы? <a href="#">Залогиньтесь</a></div>
+                        <div>Уже зарегестрированы? <Link to='/login'>Залогиньтесь</Link></div>
                     </div>
                 </MuiThemeProvider>
-            </div>
         );
     }
 }
