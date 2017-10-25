@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
+import Paper from 'material-ui/Paper'
 import Typography from 'material-ui/Typography'
 import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
@@ -169,21 +170,16 @@ class Register extends Component {
     return (
       <MuiThemeProvider>
         <div className="app-registration">
-          <AppBar position="static" color="default">
-            <Toolbar>
-              <Typography type="title" color="inherit">
-                Регистрация
-              </Typography>
-            </Toolbar>
-          </AppBar>
           <form method="post" onSubmit={this.handleSubmit}>
             <TextField
               type="text"
               name="username"
-              errorText={this.state.errorUsernameMsg}
+              error={this.state.errorUsernameMsg}
+              helperText={this.state.errorUsernameMsg}
               errorStyle={this.styles.errorStyle}
               label="Логин"
               onChange={this.handleChange}
+              margin="normal"
             />{' '}
             <br />
             <TextField
@@ -193,24 +189,29 @@ class Register extends Component {
               helperText={this.state.errorPassMsg}
               label="Пароль"
               onChange={this.handleChange}
+              margin="normal"
             />{' '}
             <br />
             <TextField
               type="email"
               name="email"
-              errorText={this.state.errorEmailMsg}
+              error={this.state.errorEmailMsg}
+              helperText={this.state.errorEmailMsg}
               errorStyle={this.styles.errorStyle}
               label="Email"
               onChange={this.handleChange}
+              margin="normal"
             />{' '}
             <br />
             <TextField
               type="tel"
               name="phone"
-              errorText={this.state.errorPhoneMsg}
+              error={this.state.errorPhoneMsg}
+              helperText={this.state.errorPhoneMsg}
               errorStyle={this.styles.errorStyle}
               label="Телефон"
               onChange={this.handleChange}
+              margin="normal"
             >
               {/* <InputMask mask="+7 (999) 999-99-99" /> */}
             </TextField>{' '}
