@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField'
 import axios from 'axios'
 
 class Login extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       username: '',
@@ -17,12 +17,12 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange (e) {
+  handleChange(e) {
     e.preventDefault()
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleSubmit (e) {
+  handleSubmit(e) {
     e.preventDefault()
     if (this.state.username.length > 0) {
       if (this.state.password.length > 0) {
@@ -32,14 +32,14 @@ class Login extends Component {
         }
         axios
           .post('/user/login', payload)
-          .then(function (response) {
+          .then(function(response) {
             if (response.status === 200) {
               console.log(response.data)
             } else {
               console.log('Ошибка. Извини!', response.status)
             }
           })
-          .catch(function (error) {
+          .catch(function(error) {
             console.log(error)
           })
       } else {
@@ -49,7 +49,7 @@ class Login extends Component {
       window.alert('Введите имя пользователя')
     }
   }
-  render () {
+  render() {
     return (
       <MuiThemeProvider>
         <div className="app-login">

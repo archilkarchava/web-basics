@@ -41,7 +41,7 @@ app.use(passport.session())
 // Express Validator
 app.use(
   expressValidator({
-    errorFormatter: function (param, msg, value) {
+    errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
       var root = namespace.shift()
       var formParam = root
@@ -69,6 +69,6 @@ app.use(bodyParser.json())
 app.use('/', rootRoutes)
 app.use('/user', userRoutes)
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT, function() {
   console.log('Server started on port ' + process.env.PORT)
 })

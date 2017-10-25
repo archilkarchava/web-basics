@@ -18,7 +18,7 @@ class Register extends Component {
   emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/
   phoneRegex = /^((8|(\+7))(\d){10,10})$|^((8|(\+7))[-(](\d){3,3}[-)](\d){3,3}[-](\d){2,2}[-](\d){2,2})$/
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       username: '',
@@ -34,7 +34,7 @@ class Register extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  usernameValidator () {
+  usernameValidator() {
     if (this.state.username.length <= 0) {
       this.setState({ errorUsernameMsg: 'Поле обязательно для заполнения.' })
       return false
@@ -44,7 +44,7 @@ class Register extends Component {
     }
   }
 
-  passwordValidator () {
+  passwordValidator() {
     if (!this.passwordRegex.test(this.state.password)) {
       if (!/^[a-zA-Z\d]+$/.test(this.state.password)) {
         this.setState({
@@ -80,7 +80,7 @@ class Register extends Component {
     }
   }
 
-  emailValidator () {
+  emailValidator() {
     if (!this.emailRegex.test(this.state.email)) {
       this.setState({ errorEmailMsg: 'Введите email в формате *@*.*.' })
       return false
@@ -90,7 +90,7 @@ class Register extends Component {
     }
   }
 
-  phoneValidator () {
+  phoneValidator() {
     if (!this.phoneRegex.test(this.state.phone)) {
       this.setState({ errorPhoneMsg: 'Введите телефон по-человечески.' })
       return false
@@ -100,7 +100,7 @@ class Register extends Component {
     }
   }
 
-  handleChange (e) {
+  handleChange(e) {
     e.preventDefault()
     e.persist()
     this.setState(
@@ -123,7 +123,7 @@ class Register extends Component {
     )
   }
 
-  handleSubmit (e) {
+  handleSubmit(e) {
     e.preventDefault()
     if (
       this.state.username.length > 0 &&
@@ -139,14 +139,14 @@ class Register extends Component {
       }
       axios
         .post('/user/register', payload)
-        .then(function (response) {
+        .then(function(response) {
           if (response.status === 200) {
             console.log(response.data)
           } else {
             console.log(response.data, response.status)
           }
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error)
         })
     } else if (this.state.username.length === 0) {
@@ -163,7 +163,7 @@ class Register extends Component {
       )
     }
   }
-  render () {
+  render() {
     return (
       <MuiThemeProvider>
         <div className="app-registration">

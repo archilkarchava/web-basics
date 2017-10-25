@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 class LoggedMenu extends Component {
   static muiName = 'FlatButton'
-  render () {
+  render() {
     return (
       <div>
         <FlatButton {...this.props} label="Выйти" />
@@ -18,7 +18,7 @@ class LoggedMenu extends Component {
 
 class NotLoggedMenu extends Component {
   static muiName = 'FlatButton'
-  render () {
+  render() {
     return (
       <div>
         <FlatButton
@@ -45,7 +45,7 @@ class Dashboard extends Component {
     this.setState({ logged: logged })
   }
 
-  render () {
+  render() {
     return (
       <MuiThemeProvider>
         <div>
