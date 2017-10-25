@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
-import RaisedButton from 'material-ui/RaisedButton'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
 import axios from 'axios'
 
@@ -53,7 +55,13 @@ class Login extends Component {
     return (
       <MuiThemeProvider>
         <div className="app-login">
-          <AppBar title="Вход" />
+          <AppBar position="static" color="default">
+            <Toolbar>
+              <Typography type="title" color="inherit">
+                Вход
+              </Typography>
+            </Toolbar>
+          </AppBar>
           <form method="post" onSubmit={this.handleSubmit}>
             <TextField
               type="text"
@@ -69,7 +77,9 @@ class Login extends Component {
               onChange={this.handleChange}
             />{' '}
             <br /> <br />
-            <RaisedButton type="submit" label="Войти" primary={true} />
+            <Button raised type="submit" color="primary">
+              Войти
+            </Button>
           </form>{' '}
           <br />
           <div>

@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import AppBar from 'material-ui/AppBar'
-import RaisedButton from 'material-ui/RaisedButton'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Button from 'material-ui/Button'
 import TextField from 'material-ui/TextField'
 import axios from 'axios'
 // import InputMask from 'react-input-mask';
@@ -167,23 +169,29 @@ class Register extends Component {
     return (
       <MuiThemeProvider>
         <div className="app-registration">
-          <AppBar title="Регистрация" />
+          <AppBar position="static" color="default">
+            <Toolbar>
+              <Typography type="title" color="inherit">
+                Регистрация
+              </Typography>
+            </Toolbar>
+          </AppBar>
           <form method="post" onSubmit={this.handleSubmit}>
             <TextField
               type="text"
               name="username"
               errorText={this.state.errorUsernameMsg}
               errorStyle={this.styles.errorStyle}
-              floatingLabelText="Логин"
+              label="Логин"
               onChange={this.handleChange}
             />{' '}
             <br />
             <TextField
               type="password"
               name="password"
-              errorText={this.state.errorPassMsg}
-              errorStyle={this.styles.errorStyle}
-              floatingLabelText="Пароль"
+              error={this.state.errorPassMsg}
+              helperText={this.state.errorPassMsg}
+              label="Пароль"
               onChange={this.handleChange}
             />{' '}
             <br />
@@ -192,7 +200,7 @@ class Register extends Component {
               name="email"
               errorText={this.state.errorEmailMsg}
               errorStyle={this.styles.errorStyle}
-              floatingLabelText="Email"
+              label="Email"
               onChange={this.handleChange}
             />{' '}
             <br />
@@ -201,17 +209,18 @@ class Register extends Component {
               name="phone"
               errorText={this.state.errorPhoneMsg}
               errorStyle={this.styles.errorStyle}
-              floatingLabelText="Телефон"
+              label="Телефон"
               onChange={this.handleChange}
             >
               {/* <InputMask mask="+7 (999) 999-99-99" /> */}
             </TextField>{' '}
             <br /> <br />
-            <RaisedButton
+            <Button raised
               type="submit"
-              label="Зарегестрироваться"
-              primary={true}
-            />
+              color="primary"
+            >
+              Зарегестрироваться
+            </Button>
           </form>{' '}
           <br />
           <div>
