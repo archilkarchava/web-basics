@@ -1,0 +1,21 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "react/prop-types": "off",
+    "space-before-function-paren": "off"
+  },
+  "extends": [
+    "standard",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "eslint-plugin-node",
+    "eslint-plugin-promise",
+    "eslint-plugin-react",
+    "eslint-plugin-standard"
+  ]
+}
