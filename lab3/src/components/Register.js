@@ -139,11 +139,11 @@ class Register extends Component {
       }
       axios
         .post('/user/register', payload)
-        .then(function(response) {
-          if (response.status === 200) {
-            console.log(response.data)
+        .then(function(res) {
+          if (res.status === 200) {
+            console.log(res.data)
           } else {
-            console.log(response.data, response.status)
+            console.log(res.data, res.status)
           }
         })
         .catch(function(error) {

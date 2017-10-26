@@ -32,15 +32,15 @@ class Login extends Component {
         }
         axios
           .post('/user/login', payload)
-          .then(function(response) {
-            if (response.status === 200) {
-              console.log(response.data)
+          .then(function(res) {
+            if (res.status === 200) {
+              console.log(res.data)
             } else {
-              console.log('Ошибка. Извини!', response.status)
+              console.log(res.data, res.status)
             }
           })
-          .catch(function(error) {
-            console.log(error)
+          .catch(function(err) {
+            console.log(err)
           })
       } else {
         window.alert('Введите пароль!')

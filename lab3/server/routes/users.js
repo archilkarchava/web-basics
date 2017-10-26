@@ -47,7 +47,7 @@ router.post('/register', function(req, res) {
       console.log(user)
     })
 
-    res.status(200).send('Успех!')
+    res.status(200).send('Вы успешно зарегестрированы!')
   }
 })
 
@@ -66,7 +66,7 @@ passport.use(
         if (isMatch) {
           return done(null, user)
         } else {
-          return done(null, false, { message: 'Логин и пароль не совпадают.' })
+          return done(null, false, { message: 'Неверный пароль.' })
         }
       })
     })
@@ -89,13 +89,50 @@ router.post(
   '/login',
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/user/login',
-    failWithError: true
+    failureRedirect: '/users/login'
   }),
   function(req, res) {
+    res.json('Вы вошли успешно.')
     res.redirect('/')
   }
 )
+
+/* router.post('/login', function(req, res) {
+  if (req.body.name && req.body.password) {
+    var username = req.body.username
+    var password = req.body.password
+  }
+  User.getUserByUsername(username, function(err, user) {
+    if (err) throw err
+    if (!user) {
+      return done(null, false, {
+        message: 'Пользователя с таким именем не существует.'
+      })
+    }
+
+    User.comparePassword(password, user.password, function(err, isMatch) {
+      if (err) throw err
+      if (isMatch) {
+        return done(null, user)
+      } else {
+        return done(null, false, { message: 'Неверный пароль.' })
+      }
+    })
+  })
+  var user = users[_.findIndex(users, { name: name })]
+  if (!user) {
+    res.status(401).json({ message: 'no such user found' })
+  }
+
+  if (user.password === req.body.password) {
+    // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
+    var payload = { id: user.id }
+    var token = jwt.sign(payload, jwtOptions.secretOrKey)
+    res.json({ message: 'ok', token: token })
+  } else {
+    res.status(401).json({ message: 'passwords did not match' })
+  }
+}) */
 
 // logout
 router.get('/logout', function(req, res) {
