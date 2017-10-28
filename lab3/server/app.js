@@ -7,7 +7,6 @@ var expressValidator = require('express-validator')
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
-var MongoStore = require('connect-mongo')(session)
 var passport = require('passport')
 var mongoose = require('mongoose')
 mongoose.connect(process.env.DB_HOST, { useMongoClient: true })
@@ -19,23 +18,8 @@ var userRoutes = require('./routes/users')
 // Init app
 var app = express()
 
-app.use(cookieParser())
-
-// BodyParser Middleware
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
-)
-app.use(cookieParser())
-
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '..', 'build')))
-
-// Include routes
-app.use('/', rootRoutes)
-app.use('/users', userRoutes)
 
 // Always return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {
@@ -46,9 +30,6 @@ app.get('*', (req, res) => {
 app.use(
   session({
     secret: process.env.SECRET,
-    store: new MongoStore({
-      mongooseConnection: process.env.DB_HOST
-    }),
     saveUninitialized: true,
     resave: true
   })
@@ -77,6 +58,20 @@ app.use(
     }
   })
 )
+
+// BodyParser middleware
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+)
+
+app.use(bodyParser.json())
+app.use(cookieParser())
+
+// Include routes
+app.use('/', rootRoutes)
+app.use('/users', userRoutes)
 
 app.listen(process.env.PORT, function() {
   console.log('Server started on port ' + process.env.PORT)

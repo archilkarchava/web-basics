@@ -31,7 +31,7 @@ class Login extends Component {
           password: this.state.password
         }
         axios
-          .post('/user/login', payload)
+          .post('/users/login', payload)
           .then(function(res) {
             if (res.status === 200) {
               console.log(res.data)

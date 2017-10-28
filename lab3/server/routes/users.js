@@ -25,7 +25,6 @@ router.post('/register', function(req, res) {
 
   req.checkBody('username', 'Введите имя пользователя').notEmpty()
   req.checkBody('email', 'Введите Email').notEmpty()
-  req.checkBody('email', 'Email введен неверно').isEmail()
   req.checkBody('password', 'Введите пароль').notEmpty()
 
   let errors = req.validationErrors()
@@ -41,19 +40,27 @@ router.post('/register', function(req, res) {
       email: email,
       phone: phone
     })
-
-    User.createUser(newUser, function(err, user) {
+    User.findOne({ username: username }, function(err, user) {
       if (err) throw err
-      console.log(user)
+      if (!user) {
+        User.findOne({ email: email }, function(err, user) {
+          if (err) throw err
+          if (!user) {
+            User.createUser(newUser, function(err, user) {
+              if (err) throw err
+              console.log(user)
+              res.status(200).send('Вы успешно зарегестрированы!')
+            })
+          } else console.log('Данный email уже зарегестрирован.')
+        })
+      } else console.log('Пользователь с таким именем уже существует.')
     })
-
-    res.status(200).send('Вы успешно зарегестрированы!')
   }
 })
 
 passport.use(
   new LocalStrategy(function(username, password, done) {
-    User.getUserByUsername(username, function(err, user) {
+    User.findOne({ username: username }, function(err, user) {
       if (err) throw err
       if (!user) {
         return done(null, false, {

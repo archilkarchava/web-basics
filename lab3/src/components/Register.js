@@ -138,7 +138,7 @@ class Register extends Component {
         phone: this.state.phone
       }
       axios
-        .post('/user/register', payload)
+        .post('/users/register', payload)
         .then(function(res) {
           if (res.status === 200) {
             console.log(res.data)
