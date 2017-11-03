@@ -1,13 +1,13 @@
 // src/Routes.js
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import React from "react"
+import { Route, Switch } from "react-router-dom"
 
-import Dashboard from './components/Dashboard'
-import Register from './components/Register'
-import Login from './components/Login'
+import Dashboard from "./components/pages/Dashboard"
+import Register from "./components/pages/RegistrationPage"
+import Login from "./components/pages/Login"
 // import NotFound from './components/NotFound';
 
-const Routes = props => (
+const Routes = () => (
   <Switch>
     <Route exact path="/" component={Dashboard} />
     <Route path="/register" component={Register} />

@@ -1,91 +1,99 @@
-var express = require('express')
-var router = express.Router()
-var passport = require('passport')
-var LocalStrategy = require('passport-local').Strategy
+import express from "express"
+import passport from "passport"
+import LocalStrategy from "passport-local"
 
 // Bring in User Model
-let User = require('../models/user')
+import User from "../models/user"
+
+const router = express.Router()
 
 // Login Form
-router.get('/login', function(req, res) {
-  res.render('login')
+router.get("/login", (req, res) => {
+  res.render("login")
 })
 
 // Register Form
-router.get('/register', function(req, res) {
-  res.render('register')
+router.get("/register", (req, res) => {
+  res.render("register")
 })
 
 // Register Proccess
-router.post('/register', function(req, res) {
-  const email = req.body.email
-  const username = req.body.username
-  const password = req.body.password
-  const phone = req.body.phone
+router.post("/register", (req, res) => {
+  const { username, password, email, phone } = req.body
 
-  req.checkBody('username', 'Введите имя пользователя').notEmpty()
-  req.checkBody('email', 'Введите Email').notEmpty()
-  req.checkBody('password', 'Введите пароль').notEmpty()
+  req.checkBody("username", "Введите имя пользователя").notEmpty()
+  req.checkBody("email", "Введите Email").notEmpty()
+  req.checkBody("password", "Введите пароль").notEmpty()
 
-  let errors = req.validationErrors()
+  const errors = req.validationErrors()
 
   if (errors) {
-    res.render('register', {
-      errors: errors
+    res.render("register", {
+      errors
     })
   } else {
-    let newUser = new User({
-      username: username,
-      password: password,
-      email: email,
-      phone: phone
+    const newUser = new User({
+      username,
+      password,
+      email,
+      phone
     })
-    User.findOne({ username: username }, function(err, user) {
+    User.findOne({ username }, (err, user) => {
       if (err) throw err
-      if (!user) {
-        User.findOne({ email: email }, function(err, user) {
+      if (user) {
+        User.findOne({ email }, (err, user) => {
           if (err) throw err
           if (!user) {
-            User.createUser(newUser, function(err, user) {
+            User.createUser(newUser, (err, user) => {
               if (err) throw err
               console.log(user)
-              res.status(200).send('Вы успешно зарегестрированы!')
+              res.status(200).json({ message: "Вы успешно зарегестрированы." })
+              return true
             })
-          } else console.log('Данный email уже зарегестрирован.')
+          } else {
+            res
+              .status(200)
+              .json({ message: "Данный email уже зарегестрирован." })
+            return false
+          }
         })
-      } else console.log('Пользователь с таким именем уже существует.')
+      } else {
+        res.status(200).json({
+          message: "Пользователь с таким именем уже зарегестрирован."
+        })
+        return false
+      }
     })
   }
 })
 
 passport.use(
-  new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username }, (err, user) => {
       if (err) throw err
       if (!user) {
         return done(null, false, {
-          message: 'Пользователя с таким именем не существует.'
+          message: "Пользователя с таким именем не существует."
         })
       }
 
-      User.comparePassword(password, user.password, function(err, isMatch) {
+      User.comparePassword(password, user.password, (err, isMatch) => {
         if (err) throw err
         if (isMatch) {
           return done(null, user)
-        } else {
-          return done(null, false, { message: 'Неверный пароль.' })
         }
+        return done(null, false, { message: "Неверный пароль." })
       })
     })
   })
 )
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user.id)
 })
 
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
+passport.deserializeUser((id, done) => {
+  User.getUserById(id, (err, user) => {
     done(err, user)
   })
 })
@@ -93,14 +101,14 @@ passport.deserializeUser(function(id, done) {
 // Login Process
 
 router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/users/login'
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/users/login"
   }),
-  function(req, res) {
-    res.json('Вы вошли успешно.')
-    res.redirect('/')
+  (req, res) => {
+    res.json("Вы вошли успешно.")
+    res.redirect("/")
   }
 )
 
@@ -142,9 +150,9 @@ router.post(
 }) */
 
 // logout
-router.get('/logout', function(req, res) {
+router.get("/logout", (req, res) => {
   req.logout()
-  res.redirect('/user/login')
+  res.redirect("/user/login")
 })
 
 module.exports = router

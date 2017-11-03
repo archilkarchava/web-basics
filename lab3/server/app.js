@@ -1,29 +1,33 @@
-require('dotenv').config({
+import dotenv from "dotenv"
+import express from "express"
+import path from "path"
+import expressValidator from "express-validator"
+import bodyParser from "body-parser"
+import cookieParser from "cookie-parser"
+import session from "express-session"
+import passport from "passport"
+import mongoose from "mongoose"
+import Promise from "bluebird"
+
+import rootRoutes from "./routes/index"
+import userRoutes from "./routes/users"
+
+dotenv.config({
   path: `${__dirname}/.env`
 })
-var express = require('express')
-var path = require('path')
-var expressValidator = require('express-validator')
-var bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser')
-var session = require('express-session')
-var passport = require('passport')
-var mongoose = require('mongoose')
-mongoose.connect(process.env.DB_HOST, { useMongoClient: true })
-mongoose.Promise = global.Promise
 
-var rootRoutes = require('./routes/index')
-var userRoutes = require('./routes/users')
+mongoose.connect(process.env.DB_HOST, { useMongoClient: true })
+mongoose.Promise = Promise
 
 // Init app
-var app = express()
+const app = express()
 
 // Serve static assets
-app.use(express.static(path.resolve(__dirname, '..', 'build')))
+app.use(express.static(path.resolve(__dirname, "..", "build")))
 
 // Always return the main index.html, so react-router render the route in the client
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'))
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "..", "build", "index.html"))
 })
 
 // Express Session
@@ -42,18 +46,18 @@ app.use(passport.session())
 // Express Validator
 app.use(
   expressValidator({
-    errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      var root = namespace.shift()
-      var formParam = root
+    errorFormatter(param, msg, value) {
+      const namespace = param.split(".")
+      const root = namespace.shift()
+      let formParam = root
 
       while (namespace.length) {
-        formParam += '[' + namespace.shift() + ']'
+        formParam += `[${namespace.shift()}]`
       }
       return {
         param: formParam,
-        msg: msg,
-        value: value
+        msg,
+        value
       }
     }
   })
@@ -70,9 +74,9 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 // Include routes
-app.use('/', rootRoutes)
-app.use('/users', userRoutes)
+app.use("/", rootRoutes)
+app.use("/users", userRoutes)
 
-app.listen(process.env.PORT, function() {
-  console.log('Server started on port ' + process.env.PORT)
+app.listen(process.env.PORT, () => {
+  console.log(`Server started on port ${process.env.PORT}`)
 })
