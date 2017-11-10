@@ -7,6 +7,10 @@ import PropTypes from "prop-types"
 // import InputMask from 'react-input-mask';
 
 class RegistrationForm extends Component {
+  static propTypes = {
+    submit: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -38,28 +42,24 @@ class RegistrationForm extends Component {
         if (e.target.name === "username") {
           const usernameErr = this.validateUsername(this.state.data)
           this.setState({
-            ...this.state,
             errors: { ...this.state.errors, username: usernameErr }
           })
         }
         if (e.target.name === "password") {
           const passwordErr = this.validatePassword(this.state.data)
           this.setState({
-            ...this.state,
             errors: { ...this.state.errors, password: passwordErr }
           })
         }
         if (e.target.name === "email") {
           const emailErr = this.validateEmail(this.state.data)
           this.setState({
-            ...this.state,
             errors: { ...this.state.errors, email: emailErr }
           })
         }
         if (e.target.name === "phone") {
           const phoneErr = this.validatePhone(this.state.data)
           this.setState({
-            ...this.state,
             errors: { ...this.state.errors, phone: phoneErr }
           })
         }
@@ -79,7 +79,7 @@ class RegistrationForm extends Component {
       errors.phone === ""
     ) {
       this.setState({ loading: true })
-      this.props.submit(this.state.data).catch(err => console.log(err))
+      this.props.submit(this.state.data)
     }
   }
 
@@ -136,7 +136,6 @@ class RegistrationForm extends Component {
     errors.phone = this.validatePhone(data)
     return errors
   }
-
   styles = {
     errorStyle: {
       textAlign: "left"
@@ -189,7 +188,7 @@ class RegistrationForm extends Component {
           <br /> <br />
           <RaisedButton
             type="submit"
-            label="Зарегестрироваться"
+            label="Зарегистрироваться"
             disabled={
               !(
                 errors.username === "" &&
@@ -203,15 +202,11 @@ class RegistrationForm extends Component {
         </form>
         <br />
         <div>
-          Уже зарегестрированы? <Link to="/login">Залогиньтесь</Link>
+          Уже зарегистрированы? <Link to="/login">Залогиньтесь</Link>
         </div>
       </div>
     )
   }
-}
-
-RegistrationForm.propTypes = {
-  submit: PropTypes.func.isRequired
 }
 
 export default RegistrationForm

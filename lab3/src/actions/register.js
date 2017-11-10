@@ -1,13 +1,10 @@
-import api from "../api"
-import { USER_LOGGED_IN } from "../types"
+import axios from "axios"
+import { userLoggedIn } from "./login"
 
-export const userLoggedIn = user => ({
-  type: USER_LOGGED_IN,
-  user
-})
-
-export const register = data => dispatch =>
-  api.register(data).then(user => {
-    localStorage.JWT = user.token
-    dispatch(userLoggedIn(user))
+const register = data => dispatch => {
+  axios.post("/users/register", data).then(res => {
+    console.log(res.data)
+    dispatch(userLoggedIn(res.data))
   })
+}
+export default register

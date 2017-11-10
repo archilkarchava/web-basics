@@ -6,8 +6,8 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next()
   }
-  res.status(401).send("Ошибка. Вы не залогинены.")
-  res.redirect("/user/login")
+  res.json({ success: false, message: "Ошибка. Вы не залогинены." })
+  res.redirect("/users/login")
 }
 
 // Get Homepage

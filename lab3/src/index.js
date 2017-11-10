@@ -9,22 +9,27 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 
 import registerServiceWorker from "./registerServiceWorker"
-import reducer from "./reducer"
-import setAuthHeader from "./setAuthHeader"
-import { userLoggedIn } from "./actions/auth"
+import userReducer from "./reducers/userReducer"
+import setLoginHeader from "./utils/setLoginHeader"
+import { userLoggedIn } from "./actions/login"
 import App from "./App"
 
 import "./css/index.css"
 
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
+const store = createStore(
+  userReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+)
 
 if (localStorage.JWT) {
   const payload = decode(localStorage.JWT)
   const user = {
     token: localStorage.JWT,
-    username: payload.username
+    username: payload.username,
+    email: payload.email,
+    phone: payload.phone
   }
-  setAuthHeader(localStorage.JWT)
+  setLoginHeader(localStorage.JWT)
   store.dispatch(userLoggedIn(user))
 }
 

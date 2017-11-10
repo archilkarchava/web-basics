@@ -1,21 +1,12 @@
 import express from "express"
 import passport from "passport"
 import LocalStrategy from "passport-local"
+import JwtStrategy from "passport-jwt"
 
 // Bring in User Model
 import User from "../models/user"
 
 const router = express.Router()
-
-// Login Form
-router.get("/login", (req, res) => {
-  res.render("login")
-})
-
-// Register Form
-router.get("/register", (req, res) => {
-  res.render("register")
-})
 
 // Register Proccess
 router.post("/register", (req, res) => {
@@ -32,39 +23,41 @@ router.post("/register", (req, res) => {
       errors
     })
   } else {
-    const newUser = new User({
-      username,
-      password,
-      email,
-      phone
-    })
     User.findOne({ username }, (err, user) => {
       if (err) throw err
       if (user) {
-        User.findOne({ email }, (err, user) => {
-          if (err) throw err
-          if (!user) {
-            User.createUser(newUser, (err, user) => {
-              if (err) throw err
-              console.log(user)
-              res.status(200).json({ message: "Вы успешно зарегестрированы." })
-              return true
-            })
-          } else {
-            res
-              .status(200)
-              .json({ message: "Данный email уже зарегестрирован." })
-            return false
-          }
+        res.json({
+          success: false,
+          message: "Пользователь с таким именем уже зарегистрирован."
         })
       } else {
-        res.status(200).json({
-          message: "Пользователь с таким именем уже зарегестрирован."
+        const newUser = new User({
+          username,
+          password,
+          email,
+          phone
         })
-        return false
+        User.createUser(newUser, (err, user) => {
+          if (err) throw err
+          console.log(user)
+          res
+            .status(200)
+            .json({ success: true, message: "Вы успешно зарегестрированы." })
+        })
       }
     })
   }
+})
+
+// Passport's stuff
+passport.serializeUser((user, done) => {
+  done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user)
+  })
 })
 
 passport.use(
@@ -88,71 +81,27 @@ passport.use(
   })
 )
 
-passport.serializeUser((user, done) => {
-  done(null, user.id)
-})
-
-passport.deserializeUser((id, done) => {
-  User.getUserById(id, (err, user) => {
-    done(err, user)
-  })
-})
-
 // Login Process
-
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/users/login"
-  }),
-  (req, res) => {
-    res.json("Вы вошли успешно.")
-    res.redirect("/")
-  }
-)
-
-/* router.post('/login', function(req, res) {
-  if (req.body.name && req.body.password) {
-    var username = req.body.username
-    var password = req.body.password
-  }
-  User.getUserByUsername(username, function(err, user) {
+router.post("/login", (req, res) => {
+  // Do email and password validation for the server
+  passport.authenticate("local", (err, user, info) => {
     if (err) throw err
     if (!user) {
-      return done(null, false, {
-        message: 'Пользователя с таким именем не существует.'
-      })
+      return res.json({ success: false, message: info.message })
     }
-
-    User.comparePassword(password, user.password, function(err, isMatch) {
-      if (err) throw err
-      if (isMatch) {
-        return done(null, user)
-      } else {
-        return done(null, false, { message: 'Неверный пароль.' })
+    req.logIn(user, loginErr => {
+      if (loginErr) {
+        return res.json({ success: false, message: loginErr })
       }
+      return res.json({ success: true, message: "Вы успешно вошли!" })
     })
-  })
-  var user = users[_.findIndex(users, { name: name })]
-  if (!user) {
-    res.status(401).json({ message: 'no such user found' })
-  }
-
-  if (user.password === req.body.password) {
-    // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
-    var payload = { id: user.id }
-    var token = jwt.sign(payload, jwtOptions.secretOrKey)
-    res.json({ message: 'ok', token: token })
-  } else {
-    res.status(401).json({ message: 'passwords did not match' })
-  }
-}) */
+  })(req, res)
+})
 
 // logout
 router.get("/logout", (req, res) => {
   req.logout()
-  res.redirect("/user/login")
+  return res.json({ success: true })
 })
 
 module.exports = router

@@ -19,7 +19,8 @@ const UserSchema = mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     }
   },
   {
@@ -35,18 +36,9 @@ module.exports.createUser = (newUser, callback) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err
       newUser.password = hash
-      newUser.save(callback)
     })
   })
-}
-
-module.exports.getUserByUsername = (username, callback) => {
-  const query = { username }
-  User.findOne(query, callback)
-}
-
-module.exports.getUserById = (id, callback) => {
-  User.findById(id, callback)
+  newUser.save(callback)
 }
 
 module.exports.comparePassword = (candidatePassword, hash, callback) => {
