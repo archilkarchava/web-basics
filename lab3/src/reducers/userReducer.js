@@ -1,11 +1,18 @@
-import { USER_LOGGED_IN, USER_LOGGED_OUT } from "../constants/userConstants"
+import { isEmpty } from "lodash"
+import { SET_CURRENT_USER } from "../constants/userConstants"
 
-export default function user(state = {}, action = {}) {
+const initialState = {
+  isLogged: false,
+  user: {}
+}
+
+export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case USER_LOGGED_IN:
-      return action.user
-    case USER_LOGGED_OUT:
-      return {}
+    case SET_CURRENT_USER:
+      return {
+        isLogged: !isEmpty(action.user),
+        user: action.user
+      }
     default:
       return state
   }

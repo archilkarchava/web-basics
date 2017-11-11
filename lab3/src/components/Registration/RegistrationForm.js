@@ -1,10 +1,9 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import AppBar from "material-ui/AppBar"
-import RaisedButton from "material-ui/RaisedButton"
-import TextField from "material-ui/TextField"
+import { Typography, Paper, Button, TextField } from "material-ui"
 import PropTypes from "prop-types"
-// import InputMask from 'react-input-mask';
+
+import styles from "../StylesMUI/styles"
 
 class RegistrationForm extends Component {
   static propTypes = {
@@ -142,67 +141,87 @@ class RegistrationForm extends Component {
     }
   }
   render() {
-    const { errors, loading } = this.state
+    const { data, errors, loading } = this.state
 
     return (
-      <div className="app-registration">
-        <AppBar title="Регистрация" />
-        <form method="post" onSubmit={this.handleSubmit}>
-          <TextField
-            type="text"
-            name="username"
-            errorText={errors.username}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Логин"
-            onChange={this.handleChange}
-          />
-          <br />
-          <TextField
-            type="password"
-            name="password"
-            errorText={errors.password}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Пароль"
-            onChange={this.handleChange}
-          />
-          <br />
-          <TextField
-            type="email"
-            name="email"
-            errorText={errors.email}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Email"
-            onChange={this.handleChange}
-          />
-          <br />
-          <TextField
-            type="tel"
-            name="phone"
-            errorText={errors.phone}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Телефон"
-            onChange={this.handleChange}
-          >
-            {/* <InputMask mask="+7 (999) 999-99-99" /> */}
-          </TextField>
-          <br /> <br />
-          <RaisedButton
-            type="submit"
-            label="Зарегистрироваться"
-            disabled={
-              !(
-                errors.username === "" &&
-                errors.password === "" &&
-                errors.email === "" &&
-                errors.phone === ""
-              )
-            }
-            primary
-          />
-        </form>
-        <br />
-        <div>
-          Уже зарегистрированы? <Link to="/login">Залогиньтесь</Link>
+      <div className="registration background">
+        <div className="container">
+          <Paper elevation={6}>
+            <div className="item">
+              <Typography type="headline" align="left">
+                Регистрация
+              </Typography>
+              <form method="post" onSubmit={this.handleSubmit}>
+                <TextField
+                  label="Имя пользователя"
+                  name="username"
+                  value={data.username}
+                  error={!!errors.username}
+                  helperText={errors.username}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  label="Пароль"
+                  type="password"
+                  name="password"
+                  value={data.password}
+                  error={!!errors.password}
+                  helperText={errors.password}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={data.email}
+                  error={!!errors.email}
+                  helperText={errors.email}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  label="Телефон"
+                  type="phone"
+                  name="phone"
+                  value={data.phone}
+                  error={!!errors.phone}
+                  helperText={errors.phone}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br /> <br />
+                <Button
+                  raised
+                  color="primary"
+                  type="submit"
+                  style={styles.Button}
+                  disabled={
+                    !(
+                      errors.username === "" &&
+                      errors.password === "" &&
+                      errors.email === "" &&
+                      errors.phone === ""
+                    )
+                  }
+                >
+                  Зарегистрироваться
+                </Button>
+              </form>
+              <br />
+              <div>
+                Уже зарегистрированы? <Link to="/login">Залогиньтесь</Link>
+              </div>
+            </div>
+          </Paper>
         </div>
       </div>
     )

@@ -13,7 +13,13 @@ class RegistrationPage extends Component {
     register: PropTypes.func.isRequired
   }
 
-  submit = data => this.props.register(data)
+  submit = data =>
+    this.props.register(data).then(
+      () => {
+        this.props.history.push("/")
+      },
+      err => console.log(err.response.data)
+    )
 
   render() {
     return (

@@ -1,28 +1,25 @@
 import axios from "axios"
-import { USER_LOGGED_IN, USER_LOGGED_OUT } from "../constants/userConstants"
+import jwtDecode from "jwt-decode"
+import { SET_CURRENT_USER } from "../constants/userConstants"
 import setLoginHeader from "../utils/setLoginHeader"
 
-export const userLoggedIn = user => ({
-  type: USER_LOGGED_IN,
+export const setCurrentUser = user => ({
+  type: SET_CURRENT_USER,
   user
 })
 
-export const userLoggedOut = () => ({
-  type: USER_LOGGED_OUT
-})
-
-export const login = credentials => dispatch =>
+export const login = credentials => dispatch => {
   axios.post("/users/login", credentials).then(res => {
     const { token } = res.data
-    localStorage.setItem("JWT", token)
+    localStorage.setItem("jwtToken", token)
     setLoginHeader(token)
-    dispatch(userLoggedOut())
+    dispatch(setCurrentUser(jwtDecode(token)))
   })
-
+}
 export const logout = () => dispatch => {
-  localStorage.removeItem("JWT")
+  localStorage.removeItem("jwtToken")
   setLoginHeader(false)
-  dispatch(userLoggedOut())
+  dispatch(setCurrentUser({}))
 }
 
 export const validateToken = token =>

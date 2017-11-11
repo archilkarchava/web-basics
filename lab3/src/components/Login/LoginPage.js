@@ -5,7 +5,20 @@ import LoginForm from "./LoginForm"
 import { login } from "../../actions/login"
 
 class LoginPage extends Component {
-  submit = data => this.props.login(data).then(this.props.history.push("/"))
+  static propTypes = {
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired
+    }).isRequired,
+    login: PropTypes.func.isRequired
+  }
+
+  submit = data =>
+    this.props.login(data).then(
+      () => {
+        this.props.history.push("/")
+      },
+      err => console.log(err)
+    )
 
   render() {
     return (
@@ -14,13 +27,6 @@ class LoginPage extends Component {
       </div>
     )
   }
-}
-
-LoginPage.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired,
-  login: PropTypes.func.isRequired
 }
 
 export default connect(null, { login })(LoginPage)

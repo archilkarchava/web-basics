@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import AppBar from "material-ui/AppBar"
-import RaisedButton from "material-ui/RaisedButton"
-import TextField from "material-ui/TextField"
+import { Paper, Typography, Button, TextField } from "material-ui"
 import PropTypes from "prop-types"
+
+import styles from "../StylesMUI/styles"
 
 class LoginForm extends Component {
   static propTypes = {
@@ -87,39 +87,55 @@ class LoginForm extends Component {
     }
   }
   render() {
-    const { errors, loading } = this.state
+    const { data, errors, loading } = this.state
     return (
-      <div className="app-login">
-        <AppBar title="Вход" />
-        <form method="post" onSubmit={this.handleSubmit}>
-          <TextField
-            type="text"
-            name="username"
-            errorText={errors.username}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Логин"
-            onChange={this.handleChange}
-          />
-          <br />
-          <TextField
-            type="password"
-            name="password"
-            errorText={errors.password}
-            errorStyle={this.styles.errorStyle}
-            floatingLabelText="Пароль"
-            onChange={this.handleChange}
-          />
-          <br /> <br />
-          <RaisedButton
-            type="submit"
-            label="Войти"
-            disabled={!(errors.username === "" && errors.password === "")}
-            primary
-          />
-        </form>
-        <br />
-        <div>
-          Еще не зарегистрированы? <Link to="/register">Регистрация</Link>
+      <div className="registration background">
+        <div className="container">
+          <Paper elevation={6}>
+            <div className="item">
+              <Typography type="headline" align="left">
+                Вход
+              </Typography>
+              <form method="post" onSubmit={this.handleSubmit}>
+                <TextField
+                  label="Логин"
+                  name="username"
+                  value={data.username}
+                  error={!!errors.username}
+                  helperText={errors.username}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br />
+                <TextField
+                  label="Пароль"
+                  type="password"
+                  name="password"
+                  value={data.password}
+                  error={!!errors.password}
+                  helperText={errors.password}
+                  onChange={this.handleChange}
+                  style={styles.TextField}
+                  margin="normal"
+                />
+                <br /> <br />
+                <Button
+                  raised
+                  color="primary"
+                  type="submit"
+                  style={styles.Button}
+                  disabled={!(errors.username === "" && errors.password === "")}
+                >
+                  Войти
+                </Button>
+              </form>
+              <br />
+              <div>
+                Еще не зарегистрированы? <Link to="/register">Регистрация</Link>
+              </div>
+            </div>
+          </Paper>
         </div>
       </div>
     )

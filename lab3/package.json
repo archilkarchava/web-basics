@@ -16,7 +16,7 @@
         "express-validator": "^4.2.1",
         "jwt-decode": "^2.2.0",
         "lodash": "^4.17.4",
-        "material-ui": "^0.19.4",
+        "material-ui": "^1.0.0-beta.20",
         "mongodb": "^2.2.33",
         "mongoose": "^4.12.4",
         "passport": "^0.4.0",

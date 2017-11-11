@@ -4,37 +4,38 @@ import { BrowserRouter, Route } from "react-router-dom"
 import { createStore, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
 import thunk from "redux-thunk"
-import decode from "jwt-decode"
+import jwtDecode from "jwt-decode"
 import { composeWithDevTools } from "redux-devtools-extension"
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import { createMuiTheme } from "material-ui/styles"
+import { blue } from "material-ui/colors/"
 
 import registerServiceWorker from "./registerServiceWorker"
 import userReducer from "./reducers/userReducer"
 import setLoginHeader from "./utils/setLoginHeader"
-import { userLoggedIn } from "./actions/login"
+import { setCurrentUser } from "./actions/login"
 import App from "./App"
 
 import "./css/index.css"
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue
+  }
+})
 
 const store = createStore(
   userReducer,
   composeWithDevTools(applyMiddleware(thunk))
 )
 
-if (localStorage.JWT) {
-  const payload = decode(localStorage.JWT)
-  const user = {
-    token: localStorage.JWT,
-    username: payload.username,
-    email: payload.email,
-    phone: payload.phone
-  }
-  setLoginHeader(localStorage.JWT)
-  store.dispatch(userLoggedIn(user))
+if (localStorage.jwtToken) {
+  setLoginHeader(localStorage.jwtToken)
+  store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
 }
 
 render(
-  <MuiThemeProvider>
+  <MuiThemeProvider theme={theme}>
     <BrowserRouter>
       <Provider store={store}>
         <Route component={App} />
