@@ -3,8 +3,6 @@ import express from "express"
 import path from "path"
 import expressValidator from "express-validator"
 import bodyParser from "body-parser"
-import cookieParser from "cookie-parser"
-import session from "express-session"
 import passport from "passport"
 import mongoose from "mongoose"
 import Promise from "bluebird"
@@ -15,7 +13,6 @@ import userRoutes from "./routes/users"
 dotenv.config({
   path: `${__dirname}/.env`
 })
-
 mongoose.connect(process.env.DB_HOST, { useMongoClient: true })
 mongoose.Promise = Promise
 
@@ -29,15 +26,6 @@ app.use(express.static(path.resolve(__dirname, "..", "build")))
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "..", "build", "index.html"))
 })
-
-// Express Session
-app.use(
-  session({
-    secret: process.env.SECRET,
-    saveUninitialized: true,
-    resave: true
-  })
-)
 
 // Configuring Passport
 app.use(passport.initialize())
@@ -71,7 +59,6 @@ app.use(
 )
 
 app.use(bodyParser.json())
-app.use(cookieParser())
 
 // Include routes
 app.use("/", rootRoutes)

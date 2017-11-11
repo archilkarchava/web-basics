@@ -1,10 +1,24 @@
 import express from "express"
 import passport from "passport"
-import LocalStrategy from "passport-local"
-import JwtStrategy from "passport-jwt"
+import passportJWT from "passport-jwt"
+import bcrypt from "bcryptjs"
+import dotenv from "dotenv"
+
+import User from "../models/user"
+
+dotenv.config({
+  path: `${__dirname}/../.env`
+})
+
+const { ExtractJwt } = passportJWT
+const JwtStrategy = passportJWT.Strategy
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+}
 
 // Bring in User Model
-import User from "../models/user"
 
 const router = express.Router()
 
@@ -37,13 +51,13 @@ router.post("/register", (req, res) => {
           email,
           phone
         })
-        User.createUser(newUser, (err, user) => {
-          if (err) throw err
-          console.log(user)
-          res
-            .status(200)
-            .json({ success: true, message: "Вы успешно зарегестрированы." })
-        })
+        const salt = bcrypt.genSaltSync(10)
+        newUser.password = bcrypt.hashSync(newUser.password, salt)
+        newUser
+          .save()
+          .then(
+            res.status(200).json({ message: "Вы успешно зарегистрировались" })
+          )
       }
     })
   }
@@ -60,31 +74,31 @@ passport.deserializeUser((id, done) => {
   })
 })
 
-passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username }, (err, user) => {
-      if (err) throw err
-      if (!user) {
-        return done(null, false, {
-          message: "Пользователя с таким именем не существует."
-        })
-      }
-
-      User.comparePassword(password, user.password, (err, isMatch) => {
-        if (err) throw err
-        if (isMatch) {
-          return done(null, user)
-        }
-        return done(null, false, { message: "Неверный пароль." })
+const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
+  User.findOne({ username: jwtPayload.username }, (err, user) => {
+    if (err) throw err
+    if (!user) {
+      return done(null, false, {
+        message: "Пользователя с таким именем не существует."
       })
+    }
+
+    User.comparePassword(jwtPayload.password, user.password, (err, isMatch) => {
+      if (err) throw err
+      if (isMatch) {
+        return done(null, user)
+      }
+      return done(null, false, { message: "Вы ввели неверный пароль." })
     })
   })
-)
+})
+
+passport.use(strategy)
 
 // Login Process
 router.post("/login", (req, res) => {
   // Do email and password validation for the server
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("jwt", (err, user, info) => {
     if (err) throw err
     if (!user) {
       return res.json({ success: false, message: info.message })
