@@ -218,7 +218,7 @@ class RegistrationForm extends Component {
               </form>
               <br />
               <div>
-                Уже зарегистрированы? <Link to="/login">Залогиньтесь</Link>
+                Уже зарегистрированы? <Link to="/login">Войти</Link>
               </div>
             </div>
           </Paper>

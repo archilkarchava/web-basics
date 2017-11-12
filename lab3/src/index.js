@@ -12,7 +12,7 @@ import { blue } from "material-ui/colors/"
 
 import registerServiceWorker from "./registerServiceWorker"
 import userReducer from "./reducers/userReducer"
-import setLoginHeader from "./utils/setLoginHeader"
+import setAuthHeader from "./utils/setAuthHeader"
 import { setCurrentUser } from "./actions/login"
 import App from "./App"
 
@@ -30,7 +30,7 @@ const store = createStore(
 )
 
 if (localStorage.jwtToken) {
-  setLoginHeader(localStorage.jwtToken)
+  setAuthHeader(localStorage.jwtToken)
   store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
 }
 

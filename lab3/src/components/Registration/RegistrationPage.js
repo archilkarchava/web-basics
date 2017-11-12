@@ -7,19 +7,10 @@ import register from "../../actions/register"
 
 class RegistrationPage extends Component {
   static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired
-    }).isRequired,
     register: PropTypes.func.isRequired
   }
 
-  submit = data =>
-    this.props.register(data).then(
-      () => {
-        this.props.history.push("/")
-      },
-      err => console.log(err.response.data)
-    )
+  submit = data => this.props.register(data)
 
   render() {
     return (

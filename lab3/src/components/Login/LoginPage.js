@@ -6,19 +6,10 @@ import { login } from "../../actions/login"
 
 class LoginPage extends Component {
   static propTypes = {
-    history: PropTypes.shape({
-      push: PropTypes.func.isRequired
-    }).isRequired,
     login: PropTypes.func.isRequired
   }
 
-  submit = data =>
-    this.props.login(data).then(
-      () => {
-        this.props.history.push("/")
-      },
-      err => console.log(err)
-    )
+  submit = data => this.props.login(data)
 
   render() {
     return (

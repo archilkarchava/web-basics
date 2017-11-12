@@ -1,18 +1,37 @@
 import React from "react"
-import { Route } from "react-router-dom"
+import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
 import DashboardPage from "./components/Dashboard/DashboardPage"
 import RegistrationPage from "./components/Registration/RegistrationPage"
 import LoginPage from "./components/Login/LoginPage"
-import PrivateRoute from "./components/routes/PrivateRoute"
 
-const App = () => (
+import PrivateRoute from "./components/routes/PrivateRoute"
+import GuestRoute from "./components/routes/GuestRoute"
+
+const App = ({ isLogged }) => (
   <div>
-    <Route exact path="/" component={DashboardPage} />
-    <Route path="/register" component={RegistrationPage} />
-    <Route path="/login" component={LoginPage} />
+    <PrivateRoute
+      exact
+      path="/"
+      component={DashboardPage}
+      isLogged={isLogged}
+    />
+    <GuestRoute
+      path="/register"
+      component={RegistrationPage}
+      isLogged={isLogged}
+    />
+    <GuestRoute path="/login" component={LoginPage} isLogged={isLogged} />
   </div>
 )
 
-export default App
+const mapStateToProps = state => ({
+  isLogged: !!state.user.username
+})
+
+App.propTypes = {
+  isLogged: PropTypes.bool.isRequired
+}
+
+export default connect(mapStateToProps)(App)

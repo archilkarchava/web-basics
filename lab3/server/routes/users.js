@@ -1,24 +1,8 @@
 import express from "express"
-import passport from "passport"
-import passportJWT from "passport-jwt"
-import bcrypt from "bcryptjs"
-import dotenv from "dotenv"
+import jwt from "jsonwebtoken"
 
 import User from "../models/user"
-
-dotenv.config({
-  path: `${__dirname}/../.env`
-})
-
-const { ExtractJwt } = passportJWT
-const JwtStrategy = passportJWT.Strategy
-
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET
-}
-
-// Bring in User Model
+import parseErrors from "../utils/parseErrors"
 
 const router = express.Router()
 
@@ -37,85 +21,41 @@ router.post("/register", (req, res) => {
       errors
     })
   } else {
-    User.findOne({ username }, (err, user) => {
-      if (err) throw err
-      if (user) {
-        res.json({
-          success: false,
-          message: "Пользователь с таким именем уже зарегистрирован."
-        })
-      } else {
-        const newUser = new User({
-          username,
-          password,
-          email,
-          phone
-        })
-        const salt = bcrypt.genSaltSync(10)
-        newUser.password = bcrypt.hashSync(newUser.password, salt)
-        newUser
-          .save()
-          .then(
-            res.status(200).json({ message: "Вы успешно зарегистрировались" })
-          )
-      }
+    const newUser = new User({
+      username,
+      email,
+      phone
     })
+    newUser.setPassword(password)
+    newUser
+      .save()
+      .then(userRecord => {
+        res.json({ user: userRecord.toAuthJSON() })
+      })
+      .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }))
   }
 })
 
-// Passport's stuff
-passport.serializeUser((user, done) => {
-  done(null, user.id)
-})
-
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user)
-  })
-})
-
-const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-  User.findOne({ username: jwtPayload.username }, (err, user) => {
-    if (err) throw err
-    if (!user) {
-      return done(null, false, {
-        message: "Пользователя с таким именем не существует."
-      })
-    }
-
-    User.comparePassword(jwtPayload.password, user.password, (err, isMatch) => {
-      if (err) throw err
-      if (isMatch) {
-        return done(null, user)
-      }
-      return done(null, false, { message: "Вы ввели неверный пароль." })
-    })
-  })
-})
-
-passport.use(strategy)
-
 // Login Process
 router.post("/login", (req, res) => {
-  // Do email and password validation for the server
-  passport.authenticate("jwt", (err, user, info) => {
-    if (err) throw err
-    if (!user) {
-      return res.json({ success: false, message: info.message })
+  const { username, password } = req.body
+  User.findOne({ username }).then(user => {
+    if (user && user.comparePassword(password, user.password)) {
+      res.json({ user: user.toAuthJSON() })
+    } else {
+      res.status(400).json({ errors: { global: "Неверный логин или пароль." } })
     }
-    req.logIn(user, loginErr => {
-      if (loginErr) {
-        return res.json({ success: false, message: loginErr })
-      }
-      return res.json({ success: true, message: "Вы успешно вошли!" })
-    })
-  })(req, res)
+  })
 })
 
-// logout
-router.get("/logout", (req, res) => {
-  req.logout()
-  return res.json({ success: true })
+router.post("/validate_token", (req, res) => {
+  jwt.verify(req.body.token, process.env.JWT_SECRET, err => {
+    if (err) {
+      res.status(401).json({})
+    } else {
+      res.json({})
+    }
+  })
 })
 
-module.exports = router
+export default router

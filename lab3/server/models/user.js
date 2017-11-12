@@ -1,16 +1,18 @@
 import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
+import uniqueValidator from "mongoose-unique-validator"
 
 const UserSchema = mongoose.Schema(
   {
+    password: {
+      type: String,
+      required: true
+    },
     username: {
       type: String,
       required: true,
       unique: true
-    },
-    password: {
-      type: String,
-      required: true
     },
     email: {
       type: String,
@@ -23,15 +25,38 @@ const UserSchema = mongoose.Schema(
       unique: true
     }
   },
-  {
-    collection: "users"
-  }
+  { timestamps: true },
+  { collection: "users" }
 )
-module.exports = mongoose.model("User", UserSchema)
 
-module.exports.comparePassword = (candidatePassword, hash, callback) => {
-  bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
-    if (err) throw err
-    callback(null, isMatch)
-  })
+UserSchema.methods.comparePassword = function comparePassword(
+  candidatePassword,
+  passwordHash
+) {
+  return bcrypt.compareSync(candidatePassword, passwordHash)
 }
+
+UserSchema.methods.setPassword = function hashPassword(password) {
+  this.password = bcrypt.hashSync(password, 10)
+}
+
+UserSchema.methods.generateJWT = function generateJWT() {
+  return jwt.sign(
+    {
+      username: this.username,
+      email: this.email,
+      phone: this.phone
+    },
+    process.env.JWT_SECRET
+  )
+}
+
+UserSchema.methods.toAuthJSON = function toAuthJSON() {
+  return {
+    token: this.generateJWT()
+  }
+}
+
+UserSchema.plugin(uniqueValidator)
+
+export default mongoose.model("User", UserSchema)

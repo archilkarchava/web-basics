@@ -1,11 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Link } from "react-router-dom"
 import { AppBar, Toolbar, Typography, Button } from "material-ui"
 import { connect } from "react-redux"
 import * as actions from "../../actions/login"
 
-const Dashboard = ({ isLogged, logout }) => (
+const Dashboard = ({ logout, userData }) => (
   <div>
     <AppBar position="static">
       <Toolbar>
@@ -18,29 +17,30 @@ const Dashboard = ({ isLogged, logout }) => (
         >
           Личный кабинет
         </Typography>
-        {isLogged ? (
-          <Button onClick={() => logout()}>Выйти</Button>
-        ) : (
-          <div>
-            <Button color="contrast" component={Link} to="/login">
-              Войти
-            </Button>
-            <Button color="contrast" component={Link} to="/register">
-              Зарегистрироваться
-            </Button>
-          </div>
-        )}
+        <Button color="contrast" onClick={() => logout()}>
+          Выйти
+        </Button>
       </Toolbar>
     </AppBar>
+    <div>
+      <p>{userData.username}</p>
+      <p>{userData.email}</p>
+      <p>{userData.phone}</p>
+    </div>
   </div>
 )
 
 const mapStateToProps = state => ({
-  isLogged: !!state.user.token
+  userData: state.user,
+  isLogged: !!state.user.username
 })
 
 Dashboard.propTypes = {
-  isLogged: PropTypes.bool.isRequired,
+  userData: PropTypes.shape({
+    username: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string
+  }).isRequired,
   logout: PropTypes.func.isRequired
 }
 

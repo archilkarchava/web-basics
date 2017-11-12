@@ -1,13 +1,10 @@
 import dotenv from "dotenv"
 import express from "express"
-import path from "path"
 import expressValidator from "express-validator"
 import bodyParser from "body-parser"
-import passport from "passport"
 import mongoose from "mongoose"
 import Promise from "bluebird"
 
-import rootRoutes from "./routes/index"
 import userRoutes from "./routes/users"
 
 dotenv.config({
@@ -19,17 +16,9 @@ mongoose.Promise = Promise
 // Init app
 const app = express()
 
-// Serve static assets
-app.use(express.static(path.resolve(__dirname, "..", "build")))
-
-// Always return the main index.html, so react-router render the route in the client
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "..", "build", "index.html"))
+app.get("/*", (req, res) => {
+  res.sendFile(`path.join${__dirname}/index.html`)
 })
-
-// Configuring Passport
-app.use(passport.initialize())
-app.use(passport.session())
 
 // Express Validator
 app.use(
@@ -57,13 +46,11 @@ app.use(
     extended: true
   })
 )
-
 app.use(bodyParser.json())
 
 // Include routes
-app.use("/", rootRoutes)
 app.use("/users", userRoutes)
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server started on port ${process.env.PORT}`)
+  console.log(`Сервер работает на порте ${process.env.PORT}`) // eslint-disable-line
 })
