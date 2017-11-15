@@ -1,5 +1,4 @@
 import express from "express"
-import jwt from "jsonwebtoken"
 
 import User from "../models/user"
 import parseErrors from "../utils/parseErrors"
@@ -30,9 +29,11 @@ router.post("/register", (req, res) => {
     newUser
       .save()
       .then(userRecord => {
-        res.json({ user: userRecord.toAuthJSON() })
+        res.json({ success: true, user: userRecord.toAuthJSON() })
       })
-      .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }))
+      .catch(err =>
+        res.json({ success: false, errors: parseErrors(err.errors) })
+      )
   }
 })
 
@@ -41,19 +42,12 @@ router.post("/login", (req, res) => {
   const { username, password } = req.body
   User.findOne({ username }).then(user => {
     if (user && user.comparePassword(password, user.password)) {
-      res.json({ user: user.toAuthJSON() })
+      res.json({ success: true, user: user.toAuthJSON() })
     } else {
-      res.status(400).json({ errors: { global: "Неверный логин или пароль." } })
-    }
-  })
-})
-
-router.post("/validate_token", (req, res) => {
-  jwt.verify(req.body.token, process.env.JWT_SECRET, err => {
-    if (err) {
-      res.status(401).json({})
-    } else {
-      res.json({})
+      res.json({
+        success: false,
+        errors: { global: "Неверный логин или пароль." }
+      })
     }
   })
 })
