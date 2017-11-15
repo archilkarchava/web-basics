@@ -1,9 +1,8 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
-/* import axios from "axios" */
 import RegistrationForm from "./RegistrationForm"
-import register from "../../actions/register"
+import register from "../../actions/registerActions"
 
 class RegistrationPage extends Component {
   static propTypes = {
@@ -14,7 +13,7 @@ class RegistrationPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="content lightBlueBg">
         <RegistrationForm submit={this.submit} />
       </div>
     )

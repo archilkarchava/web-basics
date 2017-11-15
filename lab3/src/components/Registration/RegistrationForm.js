@@ -1,6 +1,12 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import { Typography, Paper, Button, TextField } from "material-ui"
+import {
+  Typography,
+  Paper,
+  Button,
+  TextField,
+  LinearProgress
+} from "material-ui"
 import PropTypes from "prop-types"
 
 import styles from "../StylesMUI/styles"
@@ -135,19 +141,15 @@ class RegistrationForm extends Component {
     errors.phone = this.validatePhone(data)
     return errors
   }
-  styles = {
-    errorStyle: {
-      textAlign: "left"
-    }
-  }
   render() {
     const { data, errors, loading } = this.state
 
     return (
-      <div className="registration background">
+      <div>
+        {loading && <LinearProgress color="accent" />}
         <div className="container">
           <Paper elevation={6}>
-            <div className="item">
+            <div className="form">
               <Typography type="headline" align="left">
                 Регистрация
               </Typography>

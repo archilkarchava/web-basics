@@ -27,7 +27,7 @@ const App = ({ isLogged }) => (
 )
 
 const mapStateToProps = state => ({
-  isLogged: !!state.user.username
+  isLogged: !!state.user.userData.username
 })
 
 App.propTypes = {

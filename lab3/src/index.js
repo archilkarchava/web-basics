@@ -11,9 +11,9 @@ import { createMuiTheme } from "material-ui/styles"
 import { blue } from "material-ui/colors/"
 
 import registerServiceWorker from "./registerServiceWorker"
-import userReducer from "./reducers/userReducer"
+import reducer from "./rootReducer"
 import setAuthHeader from "./utils/setAuthHeader"
-import { setCurrentUser } from "./actions/login"
+import { setCurrentUser } from "./actions/loginActions"
 import App from "./App"
 
 import "./css/index.css"
@@ -24,10 +24,7 @@ const theme = createMuiTheme({
   }
 })
 
-const store = createStore(
-  userReducer,
-  composeWithDevTools(applyMiddleware(thunk))
-)
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
 
 if (localStorage.jwtToken) {
   setAuthHeader(localStorage.jwtToken)

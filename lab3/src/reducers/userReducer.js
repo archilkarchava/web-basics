@@ -1,14 +1,14 @@
 import { SET_CURRENT_USER, USER_LOGGED_OUT } from "../constants/userConstants"
 
-export default (state = { user: {} }, action = {}) => {
+export default (state = { userData: {} }, action = {}) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
-        user: action.user
+        userData: action.userData
       }
     case USER_LOGGED_OUT:
       return {
-        user: {}
+        userData: {}
       }
     default:
       return state

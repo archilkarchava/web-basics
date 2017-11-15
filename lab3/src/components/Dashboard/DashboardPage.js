@@ -2,37 +2,28 @@ import React from "react"
 import PropTypes from "prop-types"
 import { AppBar, Toolbar, Typography, Button } from "material-ui"
 import { connect } from "react-redux"
-import * as actions from "../../actions/login"
+import * as actions from "../../actions/loginActions"
+import styles from "../StylesMUI/styles"
 
 const Dashboard = ({ logout, userData }) => (
   <div>
     <AppBar position="static">
       <Toolbar>
-        <Typography
-          type="title"
-          color="inherit"
-          style={{
-            flex: 1
-          }}
-        >
-          Личный кабинет
-        </Typography>
-        <Button color="contrast" onClick={() => logout()}>
+        <Button style={styles.flex} color="contrast" onClick={() => logout()}>
           Выйти
         </Button>
       </Toolbar>
     </AppBar>
     <div>
-      <p>{userData.username}</p>
-      <p>{userData.email}</p>
-      <p>{userData.phone}</p>
+      <p>Добро пожаловать {userData.username}</p>
+      <p>Ваш Email: {userData.email}</p>
+      <p>Ваш номер телефона: {userData.phone}</p>
     </div>
   </div>
 )
 
 const mapStateToProps = state => ({
-  userData: state.user,
-  isLogged: !!state.user.username
+  userData: state.user.userData
 })
 
 Dashboard.propTypes = {

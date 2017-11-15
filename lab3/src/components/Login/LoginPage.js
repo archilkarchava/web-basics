@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import LoginForm from "./LoginForm"
-import { login } from "../../actions/login"
+import { login } from "../../actions/loginActions"
 
 class LoginPage extends Component {
   static propTypes = {
@@ -13,7 +13,7 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div>
+      <div className="content lightBlueBg">
         <LoginForm submit={this.submit} />
       </div>
     )

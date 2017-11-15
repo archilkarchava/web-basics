@@ -4,6 +4,9 @@ const styles = {
   },
   Button: {
     width: "100%"
+  },
+  flex: {
+    flex: 1
   }
 }
 
