@@ -1,9 +1,10 @@
 import _ from "lodash"
 
-export default function(errors) {
+export default errors => {
   const result = {}
   _.forEach(errors, (val, key) => {
-    result[key] = val.message
+    const message = `Пользователь с таким ${key} уже зарегистрирован.`
+    result[key] = message
   })
   return result
 }

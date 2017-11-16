@@ -21,7 +21,7 @@ export const login = credentials => async dispatch => {
     localStorage.setItem("jwtToken", token)
     setAuthHeader(token)
     dispatch(setCurrentUser(jwtDecode(token)))
-    dispatch(setLoginSuccess(success))
+    dispatch(setLoginSuccess({ success }))
   } else {
     dispatch(setLoginError(errors))
   }

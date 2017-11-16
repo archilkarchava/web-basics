@@ -16,7 +16,12 @@ import styles from "./StylesMUI/styles"
 class Registration extends Component {
   static propTypes = {
     register: PropTypes.func.isRequired,
-    message: PropTypes.shape.isRequired
+    message: PropTypes.shape({
+      username: PropTypes.string,
+      password: PropTypes.string,
+      email: PropTypes.string,
+      phone: PropTypes.string
+    }).isRequired
   }
 
   constructor(props) {
@@ -36,7 +41,9 @@ class Registration extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.message !== nextProps.message) {
-      this.setState({ errors: nextProps.message })
+      const { errors } = this.state
+      Object.assign(errors, nextProps.message)
+      this.setState({ errors })
       this.setState({ loading: false })
     }
   }
@@ -220,7 +227,8 @@ class Registration extends Component {
                       errors.username === "" &&
                       errors.password === "" &&
                       errors.email === "" &&
-                      errors.phone === ""
+                      errors.phone === "" &&
+                      !loading
                     )
                   }
                 >

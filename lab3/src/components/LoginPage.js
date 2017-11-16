@@ -16,7 +16,10 @@ import styles from "./StylesMUI/styles"
 class Login extends Component {
   static propTypes = {
     login: PropTypes.func.isRequired,
-    message: PropTypes.shape.isRequired
+    message: PropTypes.shape({
+      username: PropTypes.string,
+      password: PropTypes.string
+    }).isRequired
   }
 
   constructor(props) {
@@ -35,7 +38,9 @@ class Login extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.message !== nextProps.message) {
-      this.setState({ errors: nextProps.message })
+      const { errors } = this.state
+      Object.assign(errors, nextProps.message)
+      this.setState({ errors })
       this.setState({ loading: false })
     }
   }
