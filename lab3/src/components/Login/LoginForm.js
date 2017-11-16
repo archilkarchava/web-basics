@@ -64,6 +64,13 @@ class LoginForm extends Component {
     if (errors.username === "" && errors.password === "") {
       this.setState({ loading: true })
       this.props.submit(this.state.data)
+      const { message } = this.props
+      console.log(message)
+      if (message.length > 0) {
+        errors.username = message
+        errors.password = message
+        this.setState({ errors, loading: false })
+      }
     }
   }
 
