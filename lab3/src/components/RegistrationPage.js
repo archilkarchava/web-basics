@@ -8,12 +8,15 @@ import {
   LinearProgress
 } from "material-ui"
 import PropTypes from "prop-types"
+import { connect } from "react-redux"
 
-import styles from "../StylesMUI/styles"
+import register from "../actions/registerActions"
+import styles from "./StylesMUI/styles"
 
-class RegistrationForm extends Component {
+class Registration extends Component {
   static propTypes = {
-    submit: PropTypes.func.isRequired
+    register: PropTypes.func.isRequired,
+    message: PropTypes.shape.isRequired
   }
 
   constructor(props) {
@@ -30,6 +33,12 @@ class RegistrationForm extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.message !== nextProps.message) {
+      this.setState({ errors: nextProps.message })
+      this.setState({ loading: false })
+    }
   }
 
   passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,16}$/
@@ -84,7 +93,7 @@ class RegistrationForm extends Component {
       errors.phone === ""
     ) {
       this.setState({ loading: true })
-      this.props.submit(this.state.data)
+      this.props.register(this.state.data)
     }
   }
 
@@ -145,7 +154,7 @@ class RegistrationForm extends Component {
     const { data, errors, loading } = this.state
 
     return (
-      <div>
+      <div className="content lightBlueBg">
         {loading && <LinearProgress color="accent" />}
         <div className="container">
           <Paper elevation={6}>
@@ -230,4 +239,8 @@ class RegistrationForm extends Component {
   }
 }
 
-export default RegistrationForm
+const mapStateToProps = state => ({
+  message: state.alert.message
+})
+
+export default connect(mapStateToProps, { register })(Registration)

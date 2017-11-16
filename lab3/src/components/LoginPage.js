@@ -9,13 +9,14 @@ import {
 } from "material-ui"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
-import { login } from "../../actions/loginActions"
+import { login } from "../actions/loginActions"
 
-import styles from "../StylesMUI/styles"
+import styles from "./StylesMUI/styles"
 
-class LoginForm extends Component {
+class Login extends Component {
   static propTypes = {
-    submit: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
+    message: PropTypes.shape.isRequired
   }
 
   constructor(props) {
@@ -30,6 +31,13 @@ class LoginForm extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.message !== nextProps.message) {
+      this.setState({ errors: nextProps.message })
+      this.setState({ loading: false })
+    }
   }
 
   handleChange = e => {
@@ -63,14 +71,7 @@ class LoginForm extends Component {
     this.setState({ errors })
     if (errors.username === "" && errors.password === "") {
       this.setState({ loading: true })
-      this.props.submit(this.state.data)
-      const { message } = this.props
-      console.log(message)
-      if (message.length > 0) {
-        errors.username = message
-        errors.password = message
-        this.setState({ errors, loading: false })
-      }
+      this.props.login(this.state.data)
     }
   }
 
@@ -99,7 +100,7 @@ class LoginForm extends Component {
   render() {
     const { data, errors, loading } = this.state
     return (
-      <div>
+      <div className="content lightBlueBg">
         {loading && <LinearProgress color="accent" />}
         <div className="container">
           <Paper elevation={6}>
@@ -163,4 +164,4 @@ const mapStateToProps = state => ({
   message: state.alert.message
 })
 
-export default connect(mapStateToProps, { login })(LoginForm)
+export default connect(mapStateToProps, { login })(Login)

@@ -1,9 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { AppBar, Toolbar, Typography, Button } from "material-ui"
+import { AppBar, Toolbar, Button } from "material-ui"
 import { connect } from "react-redux"
-import * as actions from "../../actions/loginActions"
-import styles from "../StylesMUI/styles"
+import * as actions from "./../actions/loginActions"
+import styles from "./StylesMUI/styles"
 
 const Dashboard = ({ logout, userData }) => (
   <div>

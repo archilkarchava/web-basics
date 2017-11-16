@@ -46,7 +46,10 @@ router.post("/login", (req, res) => {
     } else {
       res.json({
         success: false,
-        errors: { global: "Неверный логин или пароль." }
+        errors: {
+          username: "Неверный логин или пароль.",
+          password: "Неверный логин или пароль."
+        }
       })
     }
   })
