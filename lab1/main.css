@@ -1,5 +1,5 @@
-body{
-	margin:0px;
+body {
+	margin: 0px;
 }
 
 .wrapper {
@@ -8,19 +8,22 @@ body{
 	height: 100vh;
 }
 
-#column1{
-	min-width: 100px;
-	width: 100px;
-	height: 100vh;
+.column:first-child {
+	flex: 0 0 100px;
+}
+
+.column:not(:first-child) {
+	flex: auto;
+}
+
+.black {
 	background: #000000;
 }
 
-#column2{
-	width: 50%;
+.yellow {
 	background: #FFE936;
 }
 
-#column3{
-	width: 50%;
+.red {
 	background: #FF0F21;
 }
