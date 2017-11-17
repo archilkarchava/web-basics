@@ -151,7 +151,7 @@ class RegistrationPage extends Component {
     const { data, errors, loading } = this.state
 
     return (
-      <div className="content lightBlueBg">
+      <div className="lightBlueBg">
         {loading && <LinearProgress color="accent" />}
         <div className="container">
           <Paper elevation={6}>

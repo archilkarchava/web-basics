@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { AppBar, Toolbar, Button } from "material-ui"
+import { AppBar, Toolbar, Button, Card, Typography } from "material-ui"
 import { connect } from "react-redux"
 import { logout as logoutAction } from "./../actions/loginActions"
 import styles from "./StylesMUI/styles"
@@ -9,6 +9,9 @@ const Dashboard = ({ logout, userData }) => (
   <div>
     <AppBar position="static">
       <Toolbar>
+        <Typography type="title" color="inherit">
+          Добро пожаловать {userData.username}
+        </Typography>
         <Button
           style={styles.alignRight}
           color="contrast"
@@ -18,10 +21,13 @@ const Dashboard = ({ logout, userData }) => (
         </Button>
       </Toolbar>
     </AppBar>
-    <div>
-      <p>Добро пожаловать {userData.username}</p>
-      <p>Ваш Email: {userData.email}</p>
-      <p>Ваш номер телефона: {userData.phone}</p>
+    <div className="container">
+      <div className="marginBottom">
+        <Typography type="headline">Ваш Email: {userData.email}</Typography>
+        <Typography type="headline">
+          Ваш номер телефона: {userData.phone}
+        </Typography>
+      </div>
     </div>
   </div>
 )
