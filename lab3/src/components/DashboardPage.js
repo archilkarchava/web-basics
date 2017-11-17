@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { AppBar, Toolbar, Button, Card, Typography } from "material-ui"
+import { AppBar, Toolbar, Button, Typography } from "material-ui"
 import { connect } from "react-redux"
 import { logout as logoutAction } from "./../actions/loginActions"
 import styles from "./StylesMUI/styles"
