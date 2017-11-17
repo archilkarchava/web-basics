@@ -1,6 +1,5 @@
 import dotenv from "dotenv"
 import express from "express"
-import expressValidator from "express-validator"
 import bodyParser from "body-parser"
 import mongoose from "mongoose"
 import Promise from "bluebird"
@@ -19,26 +18,6 @@ const app = express()
 app.get("/*", (req, res) => {
   res.sendFile(`${__dirname}/index.html`)
 })
-
-// Express Validator
-app.use(
-  expressValidator({
-    errorFormatter(param, msg, value) {
-      const namespace = param.split(".")
-      const root = namespace.shift()
-      let formParam = root
-
-      while (namespace.length) {
-        formParam += `[${namespace.shift()}]`
-      }
-      return {
-        param: formParam,
-        msg,
-        value
-      }
-    }
-  })
-)
 
 // BodyParser middleware
 app.use(
