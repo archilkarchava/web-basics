@@ -64,7 +64,7 @@ class LoginPage extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const errors = this.validate(this.state.data)
+    const errors = this.validateAll(this.state.data)
     this.setState({ errors })
     if (errors.username === "" && errors.password === "") {
       this.setState({ loading: true })
@@ -88,7 +88,7 @@ class LoginPage extends Component {
     return passwordErr
   }
 
-  validate = data => {
+  validateAll = data => {
     const errors = {}
     errors.username = this.validateUsername(data)
     errors.password = this.validatePassword(data)

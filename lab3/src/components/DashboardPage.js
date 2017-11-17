@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { AppBar, Toolbar, Button } from "material-ui"
 import { connect } from "react-redux"
-import * as actions from "./../actions/loginActions"
+import { logout as logoutAction } from "./../actions/loginActions"
 import styles from "./StylesMUI/styles"
 
 const Dashboard = ({ logout, userData }) => (
@@ -39,4 +39,4 @@ Dashboard.propTypes = {
   logout: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, { logout: actions.logout })(Dashboard)
+export default connect(mapStateToProps, { logout: logoutAction })(Dashboard)

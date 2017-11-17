@@ -81,7 +81,7 @@ class RegistrationPage extends Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    const errors = this.validate(this.state.data)
+    const errors = this.validateAll(this.state.data)
     this.setState({ errors })
     if (
       errors.username === "" &&
@@ -139,7 +139,7 @@ class RegistrationPage extends Component {
     return phoneErr
   }
 
-  validate = data => {
+  validateAll = data => {
     const errors = {}
     errors.username = this.validateUsername(data)
     errors.password = this.validatePassword(data)
@@ -227,7 +227,7 @@ class RegistrationPage extends Component {
               </form>
               <br />
               <div>
-                Уже зарегистрированы? <Link to="/login">Войти</Link>
+                Уже зарегистрированы? <Link to="/login">Вход</Link>
               </div>
             </div>
           </Paper>
