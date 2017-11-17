@@ -13,17 +13,7 @@ import { connect } from "react-redux"
 import register from "../actions/registerActions"
 import styles from "./StylesMUI/styles"
 
-class Registration extends Component {
-  static propTypes = {
-    register: PropTypes.func.isRequired,
-    message: PropTypes.shape({
-      username: PropTypes.string,
-      password: PropTypes.string,
-      email: PropTypes.string,
-      phone: PropTypes.string
-    }).isRequired
-  }
-
+class RegistrationPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -251,4 +241,14 @@ const mapStateToProps = state => ({
   message: state.alert.message
 })
 
-export default connect(mapStateToProps, { register })(Registration)
+RegistrationPage.propTypes = {
+  register: PropTypes.func.isRequired,
+  message: PropTypes.shape({
+    username: PropTypes.string,
+    password: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string
+  }).isRequired
+}
+
+export default connect(mapStateToProps, { register })(RegistrationPage)

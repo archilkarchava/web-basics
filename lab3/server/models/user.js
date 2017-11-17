@@ -57,6 +57,8 @@ UserSchema.methods.toAuthJSON = function toAuthJSON() {
   }
 }
 
-UserSchema.plugin(uniqueValidator)
+UserSchema.plugin(uniqueValidator, {
+  message: "Данный {PATH} уже используется."
+})
 
 export default mongoose.model("User", UserSchema)

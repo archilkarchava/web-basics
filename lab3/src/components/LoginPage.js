@@ -13,15 +13,7 @@ import { login } from "../actions/loginActions"
 
 import styles from "./StylesMUI/styles"
 
-class Login extends Component {
-  static propTypes = {
-    login: PropTypes.func.isRequired,
-    message: PropTypes.shape({
-      username: PropTypes.string,
-      password: PropTypes.string
-    }).isRequired
-  }
-
+class LoginPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -169,4 +161,12 @@ const mapStateToProps = state => ({
   message: state.alert.message
 })
 
-export default connect(mapStateToProps, { login })(Login)
+LoginPage.propTypes = {
+  login: PropTypes.func.isRequired,
+  message: PropTypes.shape({
+    username: PropTypes.string,
+    password: PropTypes.string
+  }).isRequired
+}
+
+export default connect(mapStateToProps, { login })(LoginPage)
