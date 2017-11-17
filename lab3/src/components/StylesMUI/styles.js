@@ -7,6 +7,9 @@ const styles = {
   },
   flex: {
     flex: 1
+  },
+  alignRight: {
+    marginLeft: "auto"
   }
 }
 

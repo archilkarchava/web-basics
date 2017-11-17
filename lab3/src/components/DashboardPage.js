@@ -9,7 +9,11 @@ const Dashboard = ({ logout, userData }) => (
   <div>
     <AppBar position="static">
       <Toolbar>
-        <Button style={styles.flex} color="contrast" onClick={() => logout()}>
+        <Button
+          style={styles.alignRight}
+          color="contrast"
+          onClick={() => logout()}
+        >
           Выйти
         </Button>
       </Toolbar>
