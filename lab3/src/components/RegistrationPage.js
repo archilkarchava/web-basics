@@ -31,10 +31,8 @@ class RegistrationPage extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.message !== nextProps.message) {
-      const { errors } = this.state
-      Object.assign(errors, nextProps.message)
-      this.setState({ errors })
-      this.setState({ loading: false })
+      Object.assign(this.state.errors, nextProps.message)
+      this.setState({ errors: this.state.errors, loading: false })
     }
   }
 
